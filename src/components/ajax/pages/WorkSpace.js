@@ -1,7 +1,6 @@
 import { Layout, Row, Col, Space } from "antd";
 import React from "react";
 import CustomHeader from "../components/CustomHeader";
-import TabListComp from "../components/TabList";
 import WorkSpaceCard from "../components/WorkSpaceCard";
 
 function WorkSpace() {
