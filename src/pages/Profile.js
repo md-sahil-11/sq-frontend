@@ -331,7 +331,7 @@ function Profile() {
                 cover={<img alt="example" src={p.img} />}
               >
                 <div className="card-tag">{p.titlesub}</div>
-                <h5>{p.titile}</h5>
+                <h5>{p.title}</h5>
                 <p>{p.disciption}</p>
                 <Row gutter={[6, 0]} className="card-footer">
                   <Col span={12}>
