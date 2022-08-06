@@ -8,6 +8,9 @@ const RateComp = () => {
 };
 
 function WorkSpaceCard() {
+
+  
+
   return (
     <>
       <Col md={8} className="mb-24" style={{display : "flex" , justifyContent : "center"}}>

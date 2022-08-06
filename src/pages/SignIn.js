@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useHistory} from "react-router-dom";
+import { useDispatch , useSelector  } from "react-redux";
+import { setUser } from "../redux/states/user";
+
+
 import {
   Layout,
   Button,
@@ -23,8 +27,19 @@ const initialState = {
 };
 export default function SignIn() {
   const [userData, setuserData] = useState(initialState);
-
+  const dispactch = useDispatch()
   const api = useApi();
+
+  const user = useSelector((state)=> state.user.value);
+  const history = useHistory();
+
+
+  console.log("signin",user);
+
+  const routeToWorkSpace = ()=>{
+    const path = '/workspace'
+    history.push(path)
+  }
   const handleChange = (e) => {
     const val = e.target.value;
     setuserData({
@@ -36,8 +51,12 @@ export default function SignIn() {
   const handleSubmit = async ()=>{
     if(userData.email && userData.password){
       const res = await api.post("users/account/login",userData);
-      setuserData(initialState)
-      console.log(res.data.data);
+      if(res.data.success){
+        setuserData(initialState)
+        dispactch(setUser(res.data.data));
+        routeToWorkSpace();
+      }
+
     }
   }
   return (

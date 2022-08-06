@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from 'react-redux';
+import {useHistory} from 'react-router-dom'
 
 import {
   Layout,
@@ -13,6 +14,7 @@ import {
 } from "antd";
 import { Link } from "react-router-dom";
 import useApi from "../hooks/useApi";
+import { setUser } from "../redux/states/user";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -22,9 +24,21 @@ const initialState = {
   email: "",
   password: "",
 }
+
 function SignUp(){
 
   const [userData, setuserData] = useState(initialState);
+  const dispactch = useDispatch();
+  const user = useSelector((state)=> state.user.value);
+  const history = useHistory();
+
+
+  // console.log(user);
+
+  const routeToWorkSpace = ()=>{
+    const path = '/workspace'
+    history.push(path)
+  }
 
   const api = useApi();
   const handleChange = (e) => {
@@ -35,17 +49,20 @@ function SignUp(){
     });
   };
 
+  
+
   const handleSubmit = async ()=>{
     if(userData.firstname && userData.email && userData.password){
       const res = await api.post("users/account/register",userData);
-      setuserData(initialState)
-      console.log(res.data.data);
+      if(res.data.success){
+        setuserData(initialState)
+        dispactch(setUser(res.data.data));
+        localStorage.setItem("access_token",res.data.data.token)
+        routeToWorkSpace();
+      }
     }
   }
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
