@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { Row, Col, Card, Button, Descriptions, Rate } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
-function ServiceCard({service}) {
+function ServiceCard({ service, showModel, setServiceID }) {
   return (
     <>
       <Col
         md={8}
         className="mb-24"
-        style={{display: "flex", justifyContent: "center" }}
-        
+        style={{ display: "flex", justifyContent: "center" }}
       >
         <Card
           title={<h2>{service.title}</h2>}
@@ -22,8 +21,16 @@ function ServiceCard({service}) {
           <h1>$ {service.price}</h1>
           <p>{service.description}</p>
           <br />
-          <div style={{display : "flex" , justifyContent : "flex-end"}}>
-            <Button type="primary" style={{ width: 70 }}>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              type="primary"
+              style={{ width: 70 }}
+              onClick={() => {
+                console.log(service.id);
+                setServiceID(service.id);
+                showModel();
+              }}
+            >
               BUY <ArrowRightOutlined />
             </Button>
           </div>

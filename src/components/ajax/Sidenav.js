@@ -11,7 +11,14 @@ import {
   LEADER,
   MANAGER,
 } from "../../utils/roles";
-import { BookOutlined, ProjectOutlined, TransactionOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  NotificationOutlined,
+  ProfileOutlined,
+  ProjectOutlined,
+  SendOutlined,
+  TransactionOutlined,
+} from "@ant-design/icons";
 {
   /* 
           Projects - C,L,M 
@@ -45,6 +52,7 @@ function Sidenav({ color }) {
     api
       .get("/workspaces/dashboard/" + currWorkSpace + "/get_user_type")
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           setUserType(res.data.user_type);
         }
@@ -54,7 +62,10 @@ function Sidenav({ color }) {
   return (
     <>
       <div className="brand">
-        <SelectWorkspace setCurrWorkspace={setCurrWorkspace} />
+        <SelectWorkspace
+          setCurrWorkspace={setCurrWorkspace}
+          user_type={user_type}
+        />
       </div>
       <hr />
       <Menu theme="dark" mode="inline">
@@ -109,36 +120,34 @@ function Sidenav({ color }) {
         ) : (
           <></>
         )}
-        {checkRole(menu_item_users.profile_user, user_type) ? (
-          <Menu.Item key="4">
-            <NavLink to="/profile">
-              <span
-                className="icon"
-                style={{
-                  background: page === "profile" ? color : "",
-                }}
-              ></span>
-              <span className="label">Profile</span>
-            </NavLink>
-          </Menu.Item>
-        ) : (
-          <></>
-        )}
-        {checkRole(menu_item_users.notifications, user_type) ? (
-          <Menu.Item key="5">
-            <NavLink to="/notifications">
-              <span
-                className="icon"
-                style={{
-                  background: page === "notifications" ? color : "",
-                }}
-              ></span>
-              <span className="label">Notifications</span>
-            </NavLink>
-          </Menu.Item>
-        ) : (
-          <></>
-        )}
+
+        <Menu.Item key="4">
+          <NavLink to="/profile">
+            <span
+              className="icon"
+              style={{
+                background: page === "profile" ? color : "",
+              }}
+            >
+              <ProfileOutlined />
+            </span>
+            <span className="label">Profile</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="5">
+          <NavLink to="/notifications">
+            <span
+              className="icon"
+              style={{
+                background: page === "notifications" ? color : "",
+              }}
+            >
+              <NotificationOutlined />
+            </span>
+            <span className="label">Notifications</span>
+          </NavLink>
+        </Menu.Item>
         {checkRole(menu_item_users.posts, user_type) ? (
           <Menu.Item key="6">
             <NavLink to="/social">
@@ -147,7 +156,9 @@ function Sidenav({ color }) {
                 style={{
                   background: page === "social" ? color : "",
                 }}
-              ></span>
+              >
+                <SendOutlined />
+              </span>
               <span className="label">Posts</span>
             </NavLink>
           </Menu.Item>
@@ -166,6 +177,30 @@ function Sidenav({ color }) {
               <span className="label">Training</span>
             </NavLink>
           </Menu.Item>
+        ) : (
+          <></>
+        )}
+        {user_type === LEADER ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              marginTop : 30
+            }}
+          >
+            <NavLink to="/createservice">
+              <Button
+                className="label"
+                style={{
+                  width: "100%",
+                }}
+              >
+                CREATE SERVICE
+              </Button>
+            </NavLink>
+          </div>
         ) : (
           <></>
         )}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Card, Col, Row, Typography } from "antd";
-import { Layout, Drawer, Affix } from "antd";
+import { Layout, Drawer, Affix, Button } from "antd";
 import Sidenav from "./Sidenav";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
@@ -17,7 +17,7 @@ function AjaxDashboard({ children }) {
   const [sidenavType, setSidenavType] = useState("#fafafa");
   const [fixed, setFixed] = useState(false);
   const { Title, Text } = Typography;
-  const history = useHistory()
+  const history = useHistory();
 
   const openDrawer = () => setVisible(!visible);
   const handleSidenavType = (type) => setSidenavType(type);
@@ -28,8 +28,7 @@ function AjaxDashboard({ children }) {
   pathname = pathname.replace("/", "");
 
   useEffect(() => {
-    if (!localStorage.hasOwnProperty("access_token"))
-      history.push('/sign-in')
+    if (!localStorage.hasOwnProperty("access_token")) history.push("/sign-in");
   }, []);
 
   const count = [
@@ -51,7 +50,7 @@ function AjaxDashboard({ children }) {
       className={`layout-dashboard ${
         pathname === "profile" ? "layout-profile" : ""
       } ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}
-      style={{margin : 0}}
+      style={{ margin: 0 }}
     >
       <Drawer
         title={false}
@@ -70,14 +69,13 @@ function AjaxDashboard({ children }) {
           className={`layout-dashboard ${
             pathname === "rtl" ? "layout-dashboard-rtl" : ""
           }`}
-          style={{margin : 0}}
+          style={{ margin: 0 }}
         >
           <Sider
             trigger={null}
             width={250}
             theme="light"
-
-            style={{ background: sidenavType , margin : 0}}
+            style={{ background: sidenavType, margin: 0 }}
           >
             <Sidenav color={sidenavColor} />
           </Sider>
@@ -127,7 +125,7 @@ function AjaxDashboard({ children }) {
         )}
         <Content className="content-ant">
           <>
-            <Row className="rowgap-vbox" gutter={[24, 0]}>
+            {/* <Row className="rowgap-vbox" gutter={[24, 0]}>
               {count.map((c, index) => (
                 <Col
                   key={index}
@@ -145,18 +143,18 @@ function AjaxDashboard({ children }) {
                           <span>{c.today}</span>
                           <Title level={3}>
                             {c.title}{" "}
-                            {/* <small className={c.bnb}>{c.persent}</small> */}
+                            <small className={c.bnb}>{c.persent}</small>
                           </Title>
                         </Col>
-                        {/* <Col xs={6}>
+                        <Col xs={6}>
                           <div className="icon-box">{c.icon}</div>
-                        </Col> */}
+                        </Col>
                       </Row>
                     </div>
                   </Card>
                 </Col>
               ))}
-            </Row>
+            </Row> */}
             {children}
           </>
         </Content>

@@ -19,6 +19,7 @@ import Tasks from "./components/ajax/pages/Tasks";
 import SignIn from "./components/ajax/components/SignIn";
 import SignUp from "./components/ajax/components/SignUp";
 import CreateWorkSpace from "./components/ajax/pages/CreateWorkSpace";
+import CreateService from "./components/ajax/components/CreateService";
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route exact path="/workspace" component={WorkSpace} />
         <Route exact path="/services/:workspaceid" component={Services} />
         <Route exact path="/create-workspace" component={CreateWorkSpace}/>
+        <Route exact path="/createservice" component={CreateService}/>
         <AjaxDashboard>
           <Route exact path="/social" component={Social} />
           <Route exact path="/projects" component={Project} />
