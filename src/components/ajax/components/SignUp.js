@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {useHistory} from 'react-router-dom'
-import {setUserLocal , setTokenLocal} from '../utils/localStorage'
+import {setUserLocal , setTokenLocal, fetchToken} from '../../../utils/localStorage'
 import {
   Layout,
   Button,
@@ -9,9 +9,12 @@ import {
   Form,
   Input,
   Checkbox,
+  Spin
 } from "antd";
+
+import { LoadingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import useApi from "../hooks/useApi";
+import useApi from "../../../hooks/useApi";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -25,15 +28,15 @@ const initialState = {
 function SignUp(){
 
   const [userData, setuserData] = useState(initialState);
+  const [isLoading , setIsLoading] = useState(false);
   const history = useHistory();
 
-
-  // console.log(user);
-
-  const routeToWorkSpace = ()=>{
-    const path = '/workspace'
-    history.push(path)
-  }
+  useEffect(()=>{
+    const token = fetchToken();
+    if(token){
+      history.goBack()
+    }
+  })
 
   const api = useApi();
   const handleChange = (e) => {
@@ -44,18 +47,29 @@ function SignUp(){
     });
   };
 
+    const antIcon = (
+      <LoadingOutlined
+        style={{
+          fontSize: 24,
+          color : "white"
+        }}
+        spin
+      />
+    );
+
   
 
   const handleSubmit = async ()=>{
     if(userData.firstname && userData.email && userData.password){
+      setIsLoading(true);
       const res = await api.post("users/account/register",userData);
       if(res.data.success){
         setuserData(initialState)
         const userString = JSON.stringify(res.data.data);
         setUserLocal(userString)
         setTokenLocal(res.data.data.token);
+        setIsLoading(false);
         history.goBack();
-        routeToWorkSpace();
       }
     }
   }
@@ -138,7 +152,7 @@ function SignUp(){
                   type="primary"
                   htmlType="submit"
                 >
-                  SIGN UP
+                  { isLoading ? <Spin indicator={antIcon}/> : <>SIGN UP</>}
                 </Button>
               </Form.Item>
             </Form>
