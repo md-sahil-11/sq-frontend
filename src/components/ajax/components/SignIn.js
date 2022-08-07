@@ -130,6 +130,7 @@ export default function SignIn() {
                   <Input
                     name="password"
                     placeholder="Password"
+                    type={"password"}
                     onChange={handleChange}
                     value={userData.password}
                   />

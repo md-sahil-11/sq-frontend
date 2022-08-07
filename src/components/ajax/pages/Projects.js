@@ -30,6 +30,7 @@ import pencil from "../assets/images/pencil.svg";
 import { useEffect, useState } from "react";
 import TaskTable from "../components/TaskTable";
 import useApi from "../../../hooks/useApi";
+import { getCurrentWorkSpace } from "../../../utils/localStorage";
 
 const { Title } = Typography;
 
@@ -124,8 +125,9 @@ function Project() {
   const api = useApi();
 
   const populateProjectTable = (options) => {
+    const workspace = getCurrentWorkSpace();
     api
-      .get("workspaces/dashboard/1/projects")
+      .get("workspaces/dashboard/" + workspace + "/projects")
       .then((res) => {
         const results = res.data.results.filter(
           i => options.includes(i.is_pending)

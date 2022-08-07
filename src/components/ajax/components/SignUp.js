@@ -132,6 +132,7 @@ function SignUp(){
                 <Input
                   name="password"
                   placeholder="Password"
+                  type={"password"}
                   onChange={handleChange}
                   value={userData.password}
                 />
