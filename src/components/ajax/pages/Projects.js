@@ -11,7 +11,7 @@ import {
   Avatar,
   Typography,
 } from "antd";
-
+import {get} from '../../../utils/localStorage'
 import { ToTopOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -82,14 +82,10 @@ const columns = [
     dataIndex: "assignor",
   },
   {
-    title: "assigned_at",
+    title: "ASSIGNED AT",
     // key: "employed",
     dataIndex: "assigned_at",
   },
-];
-
-const data = [
-  
 ];
 
 // project table start
@@ -100,8 +96,8 @@ const project = [
     width: "32%",
   },
   {
-    title: "DESCRIPTION",
-    dataIndex: "description",
+    title: "CLIENT",
+    dataIndex: "client",
   },
   {
     title: "ASSIGNED AT",
@@ -124,13 +120,12 @@ function Project() {
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
   const api = useApi();
   const priority_color = {
-    "high": "red",
-    "medium": "yellow",
-    "low": "green"
-  }
+    high: "red",
+    medium: "yellow",
+    low: "green",
+  };
   const showTaskTable = (id) => {
-    api.get(`workspaces/dashboard/${id}/project_tasks`)
-    .then(res => {
+    api.get(`workspaces/dashboard/${id}/project_tasks`).then((res) => {
       for (let i of res.data.results) {
         var date = i.assigned_at;
         var readable_date = new Date(date).toDateString();
@@ -146,9 +141,15 @@ function Project() {
           priority: (
             <>
               <div className="author-info">
-                <Title 
-                style={{"color": priority_color[i.priority], "textTransform": "capitalize"}} level={5}
-                >{i.priority}</Title>
+                <Title
+                  style={{
+                    color: priority_color[i.priority],
+                    textTransform: "capitalize",
+                  }}
+                  level={5}
+                >
+                  {i.priority}
+                </Title>
               </div>
             </>
           ),
@@ -164,8 +165,11 @@ function Project() {
           ),
           status: (
             <>
-              <Button type="primary" className={!i.is_pending ? "tag-badge": "tag-primary"}>
-                {i.is_pending? "PENIDNG": "COMPLETED"}
+              <Button
+                type="primary"
+                className={!i.is_pending ? "tag-badge" : "tag-primary"}
+              >
+                {i.is_pending ? "PENIDNG" : "COMPLETED"}
               </Button>
             </>
           ),
@@ -176,71 +180,92 @@ function Project() {
               </div>
             </>
           ),
-        }
-        setDatatask(t => [...t, rowData])
+        };
+        setDatatask((t) => [...t, rowData]);
       }
-      if (res.status == 200)
-        setTaskTable(true);
-    })
-    
+      if (res.status == 200) setTaskTable(true);
+    });
   };
   const completeProject = (e, id) => {
-    // if (user_type && (user_type == "manager" || user_type == "leader")) {
-      api.put('workspaces/dashboard/1/complete_project')
-      .then(res => console.log(res))
-    // }
-  }
+    api
+      .put(`workspaces/dashboard/${id}/complete_project`)
+      .then((res) => console.log(res));
+  };
 
-  useEffect(() => { 
-    api.get("workspaces/dashboard/1/projects")
-    .then(res => {
-      console.log(res.data.results)
-      for (let i of res.data.results) {
-        var date = i.assigned_at;
-        var readable_date = new Date(date).toDateString();
-        const rowData = {
-          key: `${i.id}`,
-          title: (
-            <>
+  const populateProjectTable = (options) => {
+    const wid = 
+    api
+      .get("workspaces/dashboard/1/projects")
+      .then((res) => {
+        const results = res.data.results.filter(
+          i => options.includes(i.is_pending)
+        )
+        console.log(results);
+        for (let i of results) {
+          var date = i.assigned_at;
+          var readable_date = new Date(date).toDateString();
+          const rowData = {
+            key: `${i.id}`,
+            title: (
+              <>
                 <div className="avatar-info">
                   <Title level={5}>{i.title}</Title>
                 </div>
-            </>
-          ),
-          description: (
-            <>
-              <div className="semibold">{i.description}</div>
-            </>
-          ),
-          assigned_at: (
-            <>
-              <div className="text-sm">{readable_date}</div>
-            </>
-          ),
-          status: (
-            <>
-              <div className="ant-progress-project">
-                {i.is_pending ? 
-                  <span onClick={(e) => completeProject(e, i.id)} className="semibold" style={{"color": "#1890FF", "cursor": "pointer"}}>IN PROGRESS</span>: 
-                  <span className="semibold" style={{"color": "green", "cursor": "pointer"}}>COMPLETED</span>
-                }
-              </div>
-            </>
-          ),
-          info: (
-            <>
-            <div className="semibold" style={{"color": "#1890FF", "cursor": "pointer"}} onClick={(event) => showTaskTable(i.id)}>
-              Info
-            </div>
-            </>
-          )
+              </>
+            ),
+            client: (
+              <>
+                <div className="semibold">{i.user.firstname}</div>
+              </>
+            ),
+            assigned_at: (
+              <>
+                <div className="text-sm">{readable_date}</div>
+              </>
+            ),
+            status: (
+              <>
+                <div className="ant-progress-project">
+                  {i.is_pending ? (
+                    <span
+                      onClick={(e) => completeProject(e, i.id)}
+                      className="semibold"
+                      style={{ color: "#1890FF", cursor: "pointer" }}
+                    >
+                      IN PROGRESS
+                    </span>
+                  ) : (
+                    <span
+                      className="semibold"
+                      style={{ color: "green", cursor: "pointer" }}
+                    >
+                      COMPLETED
+                    </span>
+                  )}
+                </div>
+              </>
+            ),
+            info: (
+              <>
+                <div
+                  className="semibold"
+                  style={{ color: "#1890FF", cursor: "pointer" }}
+                  onClick={(event) => showTaskTable(i.id)}
+                >
+                  Info
+                </div>
+              </>
+            ),
+          };
+          setDataproject((t) => [...t, rowData]);
         }
-        setDataproject((t) => [...t, rowData])
-      }
-    })
-    .catch(err => console.log(err.message))
+      })
+      .catch((err) => console.log(err.message));
+  };
 
-  }, [])
+  useEffect(() => {
+    populateProjectTable([true, false])
+  }, []);
 
   return (
     <>
@@ -249,41 +274,52 @@ function Project() {
           <Col xs="24" xl={24}>
             {taskTable ? (
               <>
-              <span style={{cursor: 'pointer'}} onClick={() => setTaskTable(false)}>&nbsp;&nbsp;All projects</span> / Tasks
-              <div style={{height: '14px'}}></div>
-              <TaskTable columns={columns} data={datatask} />
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setTaskTable(false)}
+                >
+                  &nbsp;&nbsp;All projects
+                </span>{" "}
+                / Tasks
+                <div style={{ height: "14px" }}></div>
+                <TaskTable columns={columns} data={datatask} />
               </>
             ) : (
               <>
-              <span style={{cursor: 'pointer'}} onClick={() => setTaskTable(false)}>&nbsp;&nbsp;All projects</span>
-              <div style={{height: '14px'}}></div>
-              <Card
-                bordered={false}
-                className="criclebox tablespace mb-24"
-                title="Projects table"
-                extra={
-                  <>
-                    <Radio.Group onChange={onChange} defaultValue="all">
-                      <Radio.Button value="ongoing">Ongoing</Radio.Button>
-                      <Radio.Button value="completed">Completed</Radio.Button>
-                    </Radio.Group>
-                  </>
-                }
-              >
-                <div className="table-responsive">
-                  <Table
-                    // onRow={(record, rowIndex) => {
-                    //   return {
-                    //     onClick: (event) => showTaskTable(record.key),
-                    //   };
-                    // }}
-                    columns={project}
-                    dataSource={dataproject}
-                    pagination={false}
-                    className="ant-border-space"
-                  />
-                </div>
-              </Card>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setTaskTable(false)}
+                >
+                  &nbsp;&nbsp;All projects
+                </span>
+                <div style={{ height: "14px" }}></div>
+                <Card
+                  bordered={false}
+                  className="criclebox tablespace mb-24"
+                  title="Projects table"
+                  extra={
+                    <>
+                      <Radio.Group onChange={onChange} defaultValue="all">
+                        <Radio.Button value="ongoing">Ongoing</Radio.Button>
+                        <Radio.Button value="completed">Completed</Radio.Button>
+                      </Radio.Group>
+                    </>
+                  }
+                >
+                  <div className="table-responsive">
+                    <Table
+                      // onRow={(record, rowIndex) => {
+                      //   return {
+                      //     onClick: (event) => showTaskTable(record.key),
+                      //   };
+                      // }}
+                      columns={project}
+                      dataSource={dataproject}
+                      pagination={false}
+                      className="ant-border-space"
+                    />
+                  </div>
+                </Card>
               </>
             )}
           </Col>
