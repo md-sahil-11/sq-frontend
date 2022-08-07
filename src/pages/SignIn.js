@@ -54,9 +54,9 @@ export default function SignIn() {
       if(res.data.success){
         setuserData(initialState)
         dispactch(setUser(res.data.data));
+        localStorage.setItem("access_token",res.data.data.token)
         routeToWorkSpace();
       }
-
     }
   }
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from 'react-redux';
+import axios from "axios";
 import {useHistory} from 'react-router-dom'
 
 import {
@@ -53,7 +54,7 @@ function SignUp(){
 
   const handleSubmit = async ()=>{
     if(userData.firstname && userData.email && userData.password){
-      const res = await api.post("users/account/register",userData);
+      const res = await axios.post("https://sahil11.pythonanywhere.com/users/account/register", userData);
       if(res.data.success){
         setuserData(initialState)
         dispactch(setUser(res.data.data));
