@@ -11,7 +11,6 @@ import {
   Avatar,
   Typography,
 } from "antd";
-import {get} from '../../../utils/localStorage'
 import { ToTopOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -86,6 +85,11 @@ const columns = [
     // key: "employed",
     dataIndex: "assigned_at",
   },
+  {
+    title: "",
+    // key: "employed",
+    dataIndex: "info",
+  },
 ];
 
 // project table start
@@ -117,83 +121,9 @@ function Project() {
   const [taskTable, setTaskTable] = useState(false);
   const [dataproject, setDataproject] = useState([]);
   const [datatask, setDatatask] = useState([]);
-  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
   const api = useApi();
-  const priority_color = {
-    high: "red",
-    medium: "yellow",
-    low: "green",
-  };
-  const showTaskTable = (id) => {
-    api.get(`workspaces/dashboard/${id}/project_tasks`).then((res) => {
-      for (let i of res.data.results) {
-        var date = i.assigned_at;
-        var readable_date = new Date(date).toDateString();
-        const rowData = {
-          key: i.id,
-          title: (
-            <>
-              <div className="author-info">
-                <Title level={5}>{i.title}</Title>
-              </div>
-            </>
-          ),
-          priority: (
-            <>
-              <div className="author-info">
-                <Title
-                  style={{
-                    color: priority_color[i.priority],
-                    textTransform: "capitalize",
-                  }}
-                  level={5}
-                >
-                  {i.priority}
-                </Title>
-              </div>
-            </>
-          ),
-          assignor: (
-            <>
-              <span>{i.assignor.firstname}</span>
-            </>
-          ),
-          assignee: (
-            <>
-              <span>{i.assignee.firstname}</span>
-            </>
-          ),
-          status: (
-            <>
-              <Button
-                type="primary"
-                className={!i.is_pending ? "tag-badge" : "tag-primary"}
-              >
-                {i.is_pending ? "PENIDNG" : "COMPLETED"}
-              </Button>
-            </>
-          ),
-          assigned_at: (
-            <>
-              <div className="ant-employed">
-                <span>{readable_date}</span>
-              </div>
-            </>
-          ),
-        };
-        setDatatask((t) => [...t, rowData]);
-      }
-      if (res.status == 200) setTaskTable(true);
-    });
-  };
-  const completeProject = (e, id) => {
-    api
-      .put(`workspaces/dashboard/${id}/complete_project`)
-      .then((res) => console.log(res));
-  };
 
   const populateProjectTable = (options) => {
-    const wid = 
     api
       .get("workspaces/dashboard/1/projects")
       .then((res) => {
@@ -263,6 +193,96 @@ function Project() {
       .catch((err) => console.log(err.message));
   };
 
+  const onChange = (e) => {
+    setDataproject([])
+    if (e.target.value == 'ongoing') {
+      populateProjectTable([true])
+    } else populateProjectTable([false])
+  }
+  const priority_color = {
+    high: "red",
+    medium: "yellow",
+    low: "green",
+  };
+  const showTaskTable = (id) => {
+    api.get(`workspaces/dashboard/${id}/project_tasks`).then((res) => {
+      for (let i of res.data.results) {
+        var date = i.assigned_at;
+        var readable_date = new Date(date).toDateString();
+        const rowData = {
+          key: i.id,
+          title: (
+            <>
+              <div className="author-info">
+                <Title level={5}>{i.title}</Title>
+              </div>
+            </>
+          ),
+          priority: (
+            <>
+              <div className="author-info">
+                <Title
+                  style={{
+                    color: priority_color[i.priority],
+                    textTransform: "capitalize",
+                  }}
+                  level={5}
+                >
+                  {i.priority}
+                </Title>
+              </div>
+            </>
+          ),
+          assignor: (
+            <>
+              <span>{i.assignor.firstname}</span>
+            </>
+          ),
+          assignee: (
+            <>
+              <span>{i.assignee.firstname}</span>
+            </>
+          ),
+          status: (
+            <>
+              <Button
+                type="primary"
+                className={!i.is_pending ? "tag-badge" : "tag-primary"}
+              >
+                {i.is_pending ? "PENIDNG" : "COMPLETED"}
+              </Button>
+            </>
+          ),
+          assigned_at: (
+            <>
+              <div className="ant-employed">
+                <span>{readable_date}</span>
+              </div>
+            </>
+          ),
+          info: (
+            <>
+              <div
+                className="semibold"
+                style={{ color: "#1890FF", cursor: "pointer" }}
+                onClick={(event) => showTaskTable(i.id)}
+              >
+                Info
+              </div>
+            </>
+          ),
+        };
+        setDatatask((t) => [...t, rowData]);
+      }
+      if (res.status == 200) setTaskTable(true);
+    });
+  };
+  const completeProject = (e, id) => {
+    api
+      .put(`workspaces/dashboard/${id}/complete_project`)
+      .then((res) => console.log(res));
+  };
+  
   useEffect(() => {
     populateProjectTable([true, false])
   }, []);
@@ -308,11 +328,6 @@ function Project() {
                 >
                   <div className="table-responsive">
                     <Table
-                      // onRow={(record, rowIndex) => {
-                      //   return {
-                      //     onClick: (event) => showTaskTable(record.key),
-                      //   };
-                      // }}
                       columns={project}
                       dataSource={dataproject}
                       pagination={false}
