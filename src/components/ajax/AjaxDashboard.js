@@ -158,7 +158,6 @@ function AjaxDashboard({ children }) {
             {children}
           </>
         </Content>
-        <Footer />
       </Layout>
     </Layout>
   );

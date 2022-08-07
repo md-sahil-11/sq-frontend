@@ -5,7 +5,7 @@ import Billing from "./pages/Billing";
 import Rtl from "./pages/Rtl";
 import Profile from "./pages/Profile";
 import Main from "./components/layout/Main";
-import Project from "./components/ajax/pages/Projects";
+import Projects from "./components/ajax/pages/Projects";
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
@@ -37,8 +37,8 @@ function App() {
         <Route exact path="/createservice" component={CreateService}/>
         <AjaxDashboard>
           <Route exact path="/social" component={Social} />
-          <Route exact path="/projects" component={Project} />
-          <Route exact path="/transactions" component={Transaction}></Route>
+          <Route exact path="/projects" component={Projects} />
+          <Route exact path="/transactions" component={Billing}></Route>
           <Route exact path="/tasks" component={Tasks}></Route>
         </AjaxDashboard>
         {/* <Main>

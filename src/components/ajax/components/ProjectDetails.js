@@ -1,5 +1,6 @@
 import { Button, Form, Input , Modal} from "antd";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 const { TextArea } = Input;
 
@@ -12,12 +13,13 @@ const ProjectDetails = ({visible,setVisible,serviceid}) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [projectData , setProjectData ] = useState(initialState);
   const [form] = Form.useForm();
+  const history = useHistory();
   const api = useApi();
   const handleOk = (e) => {
     if(serviceid){
         api.post(`workspaces/service/${serviceid}/purchase`,projectData).then((res)=>{
-            setVisible(false) 
-            console.log(res);
+            setVisible(false)   
+            history.push("/projects")
         }).catch((err)=>{
             setVisible(false)
             console.log(err);
@@ -27,7 +29,6 @@ const ProjectDetails = ({visible,setVisible,serviceid}) => {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
   };
 

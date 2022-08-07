@@ -11,26 +11,9 @@ import {
   Avatar,
   Typography,
 } from "antd";
-import { ToTopOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-
-// Images
-import ava1 from "../assets/images/logo-shopify.svg";
-import ava2 from "../assets/images/logo-atlassian.svg";
-import ava3 from "../assets/images/logo-slack.svg";
-import ava5 from "../assets/images/logo-jira.svg";
-import ava6 from "../assets/images/logo-invision.svg";
-import face from "../assets/images/face-2.jpg";
-import face2 from "../assets/images/face-2.jpg";
-import face3 from "../assets/images/face-3.jpg";
-import face4 from "../assets/images/face-4.jpg";
-import face5 from "../assets/images/face-5.jpeg";
-import face6 from "../assets/images/face-6.jpeg";
-import pencil from "../assets/images/pencil.svg";
 import { useEffect, useState } from "react";
 import TaskTable from "../components/TaskTable";
 import useApi from "../../../hooks/useApi";
-import { getCurrentWorkSpace } from "../../../utils/localStorage";
 
 const { Title } = Typography;
 
@@ -82,16 +65,13 @@ const columns = [
     dataIndex: "assignor",
   },
   {
-    title: "ASSIGNED AT",
+    title: "assigned_at",
     // key: "employed",
     dataIndex: "assigned_at",
   },
-  {
-    title: "",
-    // key: "employed",
-    dataIndex: "info",
-  },
 ];
+
+const data = [];
 
 // project table start
 const project = [
@@ -101,8 +81,8 @@ const project = [
     width: "32%",
   },
   {
-    title: "CLIENT",
-    dataIndex: "client",
+    title: "DESCRIPTION",
+    dataIndex: "description",
   },
   {
     title: "ASSIGNED AT",
@@ -122,85 +102,8 @@ function Project() {
   const [taskTable, setTaskTable] = useState(false);
   const [dataproject, setDataproject] = useState([]);
   const [datatask, setDatatask] = useState([]);
+  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
   const api = useApi();
-
-  const populateProjectTable = (options) => {
-    const workspace = getCurrentWorkSpace();
-    api
-      .get("workspaces/dashboard/" + workspace + "/projects")
-      .then((res) => {
-        const results = res.data.results.filter(
-          i => options.includes(i.is_pending)
-        )
-        console.log(results);
-        for (let i of results) {
-          var date = i.assigned_at;
-          var readable_date = new Date(date).toDateString();
-          const rowData = {
-            key: `${i.id}`,
-            title: (
-              <>
-                <div className="avatar-info">
-                  <Title level={5}>{i.title}</Title>
-                </div>
-              </>
-            ),
-            client: (
-              <>
-                <div className="semibold">{i.user.firstname}</div>
-              </>
-            ),
-            assigned_at: (
-              <>
-                <div className="text-sm">{readable_date}</div>
-              </>
-            ),
-            status: (
-              <>
-                <div className="ant-progress-project">
-                  {i.is_pending ? (
-                    <span
-                      onClick={(e) => completeProject(e, i.id)}
-                      className="semibold"
-                      style={{ color: "#1890FF", cursor: "pointer" }}
-                    >
-                      IN PROGRESS
-                    </span>
-                  ) : (
-                    <span
-                      className="semibold"
-                      style={{ color: "green", cursor: "pointer" }}
-                    >
-                      COMPLETED
-                    </span>
-                  )}
-                </div>
-              </>
-            ),
-            info: (
-              <>
-                <div
-                  className="semibold"
-                  style={{ color: "#1890FF", cursor: "pointer" }}
-                  onClick={(event) => showTaskTable(i.id)}
-                >
-                  Info
-                </div>
-              </>
-            ),
-          };
-          setDataproject((t) => [...t, rowData]);
-        }
-      })
-      .catch((err) => console.log(err.message));
-  };
-
-  const onChange = (e) => {
-    setDataproject([])
-    if (e.target.value == 'ongoing') {
-      populateProjectTable([true])
-    } else populateProjectTable([false])
-  }
   const priority_color = {
     high: "red",
     medium: "yellow",
@@ -262,17 +165,6 @@ function Project() {
               </div>
             </>
           ),
-          info: (
-            <>
-              <div
-                className="semibold"
-                style={{ color: "#1890FF", cursor: "pointer" }}
-                onClick={(event) => showTaskTable(i.id)}
-              >
-                Info
-              </div>
-            </>
-          ),
         };
         setDatatask((t) => [...t, rowData]);
       }
@@ -280,14 +172,79 @@ function Project() {
     });
   };
   const completeProject = (e, id) => {
+    // if (user_type && (user_type == "manager" || user_type == "leader")) {
     api
-      .put(`workspaces/dashboard/${id}/complete_project`)
+      .put("workspaces/dashboard/1/complete_project")
       .then((res) => console.log(res));
+    // }
   };
-  
-  useEffect(() => {
-    populateProjectTable([true, false])
-  }, []);
+
+  // useEffect(() => {
+  //   api.get("workspaces/dashboard/1/projects").then((res) => {
+  //     console.log(res.data.results);
+
+  //     for (let i of results) {
+  //       var date = i.assigned_at;
+  //       var readable_date = new Date(date).toDateString();
+  //       const rowData = {
+  //         key: `${i.id}`,
+  //         title: (
+  //           <>
+  //             <div className="avatar-info">
+  //               <Title level={5}>{i.title}</Title>
+  //             </div>
+  //           </>
+  //         ),
+  //         description: (
+  //           <>
+  //             <div className="semibold">{i.description}</div>
+  //           </>
+  //         ),
+  //         assigned_at: (
+  //           <>
+  //             <div className="text-sm">{readable_date}</div>
+  //           </>
+  //         ),
+  //         status: (
+  //           <>
+  //             <div className="ant-progress-project">
+  //               {i.is_pending ? (
+  //                 <span
+  //                   onClick={(e) => completeProject(e, i.id)}
+  //                   className="semibold"
+  //                   style={{ color: "#1890FF", cursor: "pointer" }}
+  //                 >
+  //                   IN PROGRESS
+  //                 </span>
+  //               ) : (
+  //                 <span
+  //                   className="semibold"
+  //                   style={{ color: "green", cursor: "pointer" }}
+  //                 >
+  //                   COMPLETED
+  //                 </span>
+  //               )}
+  //             </div>
+  //           </>
+  //         ),
+  //         info: (
+  //           <>
+  //             <div
+  //               className="semibold"
+  //               style={{ color: "#1890FF", cursor: "pointer" }}
+  //               onClick={(event) => showTaskTable(i.id)}
+  //             >
+  //               Info
+  //             </div>
+  //           </>
+  //         ),
+  //       };
+  //       setDataproject((t) => [...t, rowData]);
+  //     }
+  //   });
+  //   // })/
+  //   // .catch(err => console.log(err.message))
+  // }, []);
 
   return (
     <>
@@ -330,6 +287,11 @@ function Project() {
                 >
                   <div className="table-responsive">
                     <Table
+                      // onRow={(record, rowIndex) => {
+                      //   return {
+                      //     onClick: (event) => showTaskTable(record.key),
+                      //   };
+                      // }}
                       columns={project}
                       dataSource={dataproject}
                       pagination={false}

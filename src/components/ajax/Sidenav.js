@@ -180,6 +180,19 @@ function Sidenav({ color }) {
         ) : (
           <></>
         )}
+        <Menu.Item key="8">
+          <NavLink to="/workspace">
+            <span
+              className="icon"
+              style={{
+                background: page === "workspace" ? color : "",
+              }}
+            >
+              <ProfileOutlined />
+            </span>
+            <span className="label">WorkSpace</span>
+          </NavLink>
+        </Menu.Item>
         {user_type === LEADER ? (
           <div
             style={{

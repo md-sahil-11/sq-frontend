@@ -54,7 +54,7 @@ function CreateService() {
       if (res.status === 201) {
         setserviceData(initialState);
         setIsLoading(false);
-        history.goBack();
+        history.push("/projects")
       }
     }
   };
