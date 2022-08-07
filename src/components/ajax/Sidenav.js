@@ -1,6 +1,7 @@
 import { Menu, Button } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import SelectWorkppace from "./components/SelectWorkspace";
 
 {
   /* 
@@ -15,7 +16,6 @@ import logo from "../../assets/images/logo.png";
 function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
-
   const dashboard = [
     <svg
       width="20"
@@ -160,8 +160,7 @@ function Sidenav({ color }) {
   return (
     <>
       <div className="brand">
-        <img src={logo} alt="" />
-        <span>Ajax</span>
+        <SelectWorkppace/>
       </div>
       <hr />
       <Menu theme="light" mode="inline">

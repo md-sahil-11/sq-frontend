@@ -2,11 +2,9 @@ import { UploadOutlined, SignalFilled } from "@ant-design/icons";
 import { Button, Form, Input, Radio, Upload } from "antd";
 import React, { useState } from "react";
 import AddTags from "./AddTags";
-import DynamicFields from "./DynamicField";
 const { TextArea } = Input;
 
 const PostForm = () => {
-    
   const [tags, setTags] = useState([]);
   const [form] = Form.useForm();
   const normFile = (e) => {
@@ -24,40 +22,22 @@ const PostForm = () => {
       <Form.Item label="Write Post">
         <TextArea rows={4} />
       </Form.Item>
-      <Form.Item
-        name="attach items"
-      >
-        <Radio.Group style={{border : "none"}}>
-          <Radio.Button value="attach" style={{border : "none"}}>
-            <Form.Item
-              name="upload"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload name="logo" action="/upload.do" listType="picture">
-                <Button>
-                  <UploadOutlined />
-                </Button>
-              </Upload>
-            </Form.Item>
-          </Radio.Button>
-          <Radio.Button value="poll" style={{border : "none"}}>
+      <Form.Item name="attach items">
+        <Form.Item
+          name="upload"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload name="logo" action="/upload.do" listType="picture">
             <Button>
-              <SignalFilled />
+              <UploadOutlined />
             </Button>
-          </Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item>
-        <DynamicFields/>
+          </Upload>
+        </Form.Item>
       </Form.Item>
       <Form.Item>
-        <AddTags tags={tags} setTags={setTags}/>
+        <AddTags tags={tags} setTags={setTags} />
       </Form.Item>
-      {/* <Form.Item >
-        <Button type="primary">Submit</Button>
-      </Form.Item> */}
     </Form>
   );
 };

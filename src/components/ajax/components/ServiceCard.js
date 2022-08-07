@@ -2,22 +2,7 @@ import React, { useState } from "react";
 import { Row, Col, Card, Button, Descriptions, Rate } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
-const requests = [
-  "Description1",
-  "Description2",
-  "Description3",
-  "Description4",
-  "Description5",
-];
-
-function ServiceCard() {
-  const renderRequests = requests.map((request, index) => {
-    return (
-      <p span={3}>
-        {index + 1} - {request}
-      </p>
-    );
-  });
+function ServiceCard({service}) {
   return (
     <>
       <Col
@@ -27,15 +12,15 @@ function ServiceCard() {
         
       >
         <Card
-          title={<h2>Web Development</h2>}
+          title={<h2>{service.title}</h2>}
           bordered={false}
           style={{
             width: 350,
             borderRadius: 5,
           }}
         >
-          <h1>$ 30,000</h1>
-          {renderRequests}
+          <h1>$ {service.price}</h1>
+          <p>{service.description}</p>
           <br />
           <div style={{display : "flex" , justifyContent : "flex-end"}}>
             <Button type="primary" style={{ width: 70 }}>
