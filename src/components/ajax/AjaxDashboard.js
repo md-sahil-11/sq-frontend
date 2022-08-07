@@ -1,43 +1,18 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Card,
-  Col,
-  Row,
-  Typography,
-  Tooltip,
-  Progress,
-  Upload,
-  message,
-  Button,
-  Timeline,
-  Radio,
-} from "antd";
+import { Card, Col, Row, Typography } from "antd";
 import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
-import Project from "./pages/Projects";
 
 const { Header: AntHeader, Content, Sider } = Layout;
 
 function AjaxDashboard({ children }) {
   const [visible, setVisible] = useState(false);
   const [placement, setPlacement] = useState("right");
-  const [sidenavColor, setSidenavColor] = useState("#1890ff");
-  const [sidenavType, setSidenavType] = useState("transparent");
+  const [sidenavColor, setSidenavColor] = useState("#0E1217");
+  const [sidenavType, setSidenavType] = useState("#fafafa");
   const [fixed, setFixed] = useState(false);
   const { Title, Text } = Typography;
 
@@ -49,13 +24,7 @@ function AjaxDashboard({ children }) {
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
 
-  useEffect(() => {
-    if (pathname === "rtl") {
-      setPlacement("left");
-    } else {
-      setPlacement("right");
-    }
-  }, [pathname]);
+  useEffect(() => {}, [pathname]);
 
   const count = [
     {
@@ -68,7 +37,7 @@ function AjaxDashboard({ children }) {
       today: "Service request",
       title: "2",
       bnb: "bnb2",
-    }
+    },
   ];
 
   return (
@@ -76,6 +45,7 @@ function AjaxDashboard({ children }) {
       className={`layout-dashboard ${
         pathname === "profile" ? "layout-profile" : ""
       } ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}
+      style={{margin : 0}}
     >
       <Drawer
         title={false}
@@ -88,20 +58,20 @@ function AjaxDashboard({ children }) {
         className={`drawer-sidebar ${
           pathname === "rtl" ? "drawer-sidebar-rtl" : ""
         } `}
+        style={{ background: "#0E1217", margin: 0 }}
       >
         <Layout
           className={`layout-dashboard ${
             pathname === "rtl" ? "layout-dashboard-rtl" : ""
           }`}
+          style={{margin : 0}}
         >
           <Sider
             trigger={null}
             width={250}
             theme="light"
-            className={`sider-primary ant-layout-sider-primary ${
-              sidenavType === "#fff" ? "active-route" : ""
-            }`}
-            style={{ background: sidenavType }}
+
+            style={{ background: sidenavType , margin : 0}}
           >
             <Sidenav color={sidenavColor} />
           </Sider>

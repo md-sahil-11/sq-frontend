@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import {
   fetchToken,
   getUser,
+  setCurrentWorkspace,
 } from "../../../utils/localStorage";
 import {
   Layout,
@@ -25,7 +26,7 @@ const initialState = {
   description: "",
   ceo: "",
   headquarter: "",
-  creator: 0,
+  creator: JSON.parse(getUser())?.id
 };
 
 function CreateWorkSpace() {
@@ -49,6 +50,7 @@ function CreateWorkSpace() {
     });
   };
 
+
   const handleSubmit = async () => {
     if (
       userData.title &&
@@ -56,20 +58,12 @@ function CreateWorkSpace() {
       userData.ceo &&
       userData.description
     ) {
-      const user = getUser();
-      const id = JSON.parse(user).id;
-
-      setuserData({
-        ...userData,
-        creator: id,
-      });
-
-      console.log(userData);
       setIsLoading(true);
       const res = await api.post("workspaces/dashboard", userData);
       if (res.status === 201) {
         setuserData(initialState);
-        // console.log(res);
+        // console.log(res.data);
+        setCurrentWorkspace(res.data.id)
         setIsLoading(false);
         history.goBack();
       }

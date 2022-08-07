@@ -1,25 +1,49 @@
 import { Select } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useApi from "../../../hooks/useApi";
+import { setCurrentWorkspace } from "../../../utils/localStorage";
 const { Option } = Select;
 
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+function SelectWorkspace({ setCurrWorkspace }) {
+  const [myWorkspaces, setMyWorkspace] = useState([]);
+  const api = useApi();
 
-const SelectWorkppace = () => (
-  <>
+  useEffect(() => {
+    api.get("/users/account/workspaces").then((res) => {
+      setMyWorkspace(res.data.results);
+    });
+  }, []);
+
+  const handleChange = (value) => {
+    setCurrentWorkspace(value);
+    setCurrWorkspace(value);
+  };
+
+  const RenderMyWorkSpaces = myWorkspaces ? (
+    myWorkspaces.map((workspace) => {
+      return (
+        <Option key={workspace.id} value={workspace.id}>
+          {workspace.title}
+        </Option>
+      );
+    })
+  ) : (
+    <></>
+  );
+
+  return (
+    <>
       <Select
-        defaultValue="Select Workspace"
+        defaultValue={"Select Workspace"}
         style={{
           width: "100%",
         }}
         onChange={handleChange}
       >
-        <Option value="lucy">Lucy</Option>
-        <Option value="jack">Jack</Option>
-        <Option value="Yiminghe">yiminghe</Option>
+        {RenderMyWorkSpaces}
       </Select>
-  </>
-);
+    </>
+  );
+}
 
-export default SelectWorkppace;
+export default SelectWorkspace;

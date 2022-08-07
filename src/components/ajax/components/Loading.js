@@ -21,7 +21,7 @@ function Loading() {
         justifyContent : "center",
         alignItems : "center"
     }}>
-      <Spin indicator={antIcon} />;
+      <Spin indicator={antIcon} />
     </div>
   );
 }

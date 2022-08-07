@@ -14,3 +14,16 @@ export const setUserLocal = (user)=>{
 export const getUser = ()=>{
     return localStorage.getItem("user")
 }
+
+export const getCurrentWorkSpace = ()=>{
+    const id =  localStorage.getItem("workspace");
+    if(!id){
+        return null;
+    }else{
+        return id;
+    }
+}
+
+export const setCurrentWorkspace = (workspace)=>{
+    localStorage.setItem("workspace",workspace);
+}
