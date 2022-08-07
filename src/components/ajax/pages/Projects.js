@@ -28,8 +28,9 @@ import face4 from "../assets/images/face-4.jpg";
 import face5 from "../assets/images/face-5.jpeg";
 import face6 from "../assets/images/face-6.jpeg";
 import pencil from "../assets/images/pencil.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskTable from "../components/TaskTable";
+import useApi from "../../../hooks/useApi";
 
 const { Title } = Typography;
 
@@ -54,348 +55,193 @@ const formProps = {
 //task table data
 const columns = [
   {
-    title: "AUTHOR",
-    dataIndex: "name",
-    key: "name",
-    width: "32%",
+    title: "TITLE",
+    dataIndex: "title",
+    // key: "name",
+    // width: "32%",
   },
   {
-    title: "FUNCTION",
-    dataIndex: "function",
-    key: "function",
+    title: "PRIORITY",
+    dataIndex: "priority",
+    // key: "function",
   },
 
   {
     title: "STATUS",
-    key: "status",
+    // key: "status",
     dataIndex: "status",
   },
   {
-    title: "EMPLOYED",
-    key: "employed",
-    dataIndex: "employed",
+    title: "ASSIGNEE",
+    // key: "status",
+    dataIndex: "assignee",
+  },
+  {
+    title: "ASSIGNOR",
+    // key: "status",
+    dataIndex: "assignor",
+  },
+  {
+    title: "assigned_at",
+    // key: "employed",
+    dataIndex: "assigned_at",
   },
 ];
 
 const data = [
-  {
-    key: "1",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face2}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Michael John</Title>
-            <p>michael@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Manager</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/04/18</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
-
-  {
-    key: "2",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face3}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Alexa Liras</Title>
-            <p>alexa@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Programator</Title>
-          <p>Developer</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button className="tag-badge">ONLINE</Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/12/20</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
-
-  {
-    key: "3",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Laure Perrier</Title>
-            <p>laure@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Executive</Title>
-          <p>Projects</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>03/04/21</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
-  {
-    key: "4",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face4}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Miriam Eric</Title>
-            <p>miriam@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Marketing</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>03/04/21</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
-  {
-    key: "5",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face5}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Richard Gran</Title>
-            <p>richard@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Manager</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button className="tag-badge">ONLINE</Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/03/20</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
-
-  {
-    key: "6",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face6}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>John Levi</Title>
-            <p>john@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Tester</Title>
-          <p>Developer</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button className="tag-badge">ONLINE</Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>14/04/17</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
-  },
+  
 ];
 
 // project table start
 const project = [
   {
-    title: "COMPANIES",
-    dataIndex: "name",
+    title: "PROJECT NAME",
+    dataIndex: "title",
     width: "32%",
   },
   {
-    title: "BUDGET",
-    dataIndex: "age",
+    title: "DESCRIPTION",
+    dataIndex: "description",
+  },
+  {
+    title: "ASSIGNED AT",
+    dataIndex: "assigned_at",
   },
   {
     title: "STATUS",
-    dataIndex: "address",
+    dataIndex: "status",
   },
   {
-    title: "COMPLETION",
-    dataIndex: "completion",
-  },
-];
-const dataproject = [
-  {
-    key: "1",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar className="shape-avatar" src={ava1} size={25} alt="" />
-          <div className="avatar-info">
-            <Title level={5}>Spotify Version</Title>
-          </div>
-        </Avatar.Group>
-      </>
-    ),
-    age: (
-      <>
-        <div className="semibold">$14,000</div>
-      </>
-    ),
-    address: (
-      <>
-        <div className="text-sm">working</div>
-      </>
-    ),
-    completion: (
-      <>
-        <div className="ant-progress-project">
-          <Progress percent={30} size="small" />
-        </div>
-      </>
-    ),
+    title: "",
+    dataIndex: "info",
   },
 ];
 
 function Project() {
   const [taskTable, setTaskTable] = useState(false);
+  const [dataproject, setDataproject] = useState([]);
+  const [datatask, setDatatask] = useState([]);
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
+  const api = useApi();
+  const priority_color = {
+    "high": "red",
+    "medium": "yellow",
+    "low": "green"
+  }
   const showTaskTable = (id) => {
-    // fetch task from backend using id
-    console.log(id);
-    setTaskTable(true);
+    api.get(`workspaces/dashboard/${id}/project_tasks`)
+    .then(res => {
+      for (let i of res.data.results) {
+        var date = i.assigned_at;
+        var readable_date = new Date(date).toDateString();
+        const rowData = {
+          key: i.id,
+          title: (
+            <>
+              <div className="author-info">
+                <Title level={5}>{i.title}</Title>
+              </div>
+            </>
+          ),
+          priority: (
+            <>
+              <div className="author-info">
+                <Title 
+                style={{"color": priority_color[i.priority], "textTransform": "capitalize"}} level={5}
+                >{i.priority}</Title>
+              </div>
+            </>
+          ),
+          assignor: (
+            <>
+              <span>{i.assignor.firstname}</span>
+            </>
+          ),
+          assignee: (
+            <>
+              <span>{i.assignee.firstname}</span>
+            </>
+          ),
+          status: (
+            <>
+              <Button type="primary" className={!i.is_pending ? "tag-badge": "tag-primary"}>
+                {i.is_pending? "PENIDNG": "COMPLETED"}
+              </Button>
+            </>
+          ),
+          assigned_at: (
+            <>
+              <div className="ant-employed">
+                <span>{readable_date}</span>
+              </div>
+            </>
+          ),
+        }
+        setDatatask(t => [...t, rowData])
+      }
+      if (res.status == 200)
+        setTaskTable(true);
+    })
+    
   };
+  const completeProject = (e, id) => {
+    // if (user_type && (user_type == "manager" || user_type == "leader")) {
+      api.put('workspaces/dashboard/1/complete_project')
+      .then(res => console.log(res))
+    // }
+  }
+
+  useEffect(() => { 
+    api.get("workspaces/dashboard/1/projects")
+    .then(res => {
+      console.log(res.data.results)
+      for (let i of res.data.results) {
+        var date = i.assigned_at;
+        var readable_date = new Date(date).toDateString();
+        const rowData = {
+          key: `${i.id}`,
+          title: (
+            <>
+                <div className="avatar-info">
+                  <Title level={5}>{i.title}</Title>
+                </div>
+            </>
+          ),
+          description: (
+            <>
+              <div className="semibold">{i.description}</div>
+            </>
+          ),
+          assigned_at: (
+            <>
+              <div className="text-sm">{readable_date}</div>
+            </>
+          ),
+          status: (
+            <>
+              <div className="ant-progress-project">
+                {i.is_pending ? 
+                  <span onClick={(e) => completeProject(e, i.id)} className="semibold" style={{"color": "#1890FF", "cursor": "pointer"}}>IN PROGRESS</span>: 
+                  <span className="semibold" style={{"color": "green", "cursor": "pointer"}}>COMPLETED</span>
+                }
+              </div>
+            </>
+          ),
+          info: (
+            <>
+            <div className="semibold" style={{"color": "#1890FF", "cursor": "pointer"}} onClick={(event) => showTaskTable(i.id)}>
+              Info
+            </div>
+            </>
+          )
+        }
+        setDataproject((t) => [...t, rowData])
+      }
+    })
+    .catch(err => console.log(err.message))
+
+  }, [])
+
   return (
     <>
       <div className="tabled">
@@ -405,7 +251,7 @@ function Project() {
               <>
               <span style={{cursor: 'pointer'}} onClick={() => setTaskTable(false)}>&nbsp;&nbsp;All projects</span> / Tasks
               <div style={{height: '14px'}}></div>
-              <TaskTable columns={columns} data={data} />
+              <TaskTable columns={columns} data={datatask} />
               </>
             ) : (
               <>
@@ -419,7 +265,6 @@ function Project() {
                   <>
                     <Radio.Group onChange={onChange} defaultValue="all">
                       <Radio.Button value="ongoing">Ongoing</Radio.Button>
-                      <Radio.Button value="requests">Requests</Radio.Button>
                       <Radio.Button value="completed">Completed</Radio.Button>
                     </Radio.Group>
                   </>
@@ -427,11 +272,11 @@ function Project() {
               >
                 <div className="table-responsive">
                   <Table
-                    onRow={(record, rowIndex) => {
-                      return {
-                        onClick: (event) => showTaskTable(record.key),
-                      };
-                    }}
+                    // onRow={(record, rowIndex) => {
+                    //   return {
+                    //     onClick: (event) => showTaskTable(record.key),
+                    //   };
+                    // }}
                     columns={project}
                     dataSource={dataproject}
                     pagination={false}

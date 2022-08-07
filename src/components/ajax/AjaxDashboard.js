@@ -5,6 +5,8 @@ import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
+import Project from "./pages/Projects";
+import { useHistory } from "react-router-dom";
 
 const { Header: AntHeader, Content, Sider } = Layout;
 
@@ -15,6 +17,7 @@ function AjaxDashboard({ children }) {
   const [sidenavType, setSidenavType] = useState("#fafafa");
   const [fixed, setFixed] = useState(false);
   const { Title, Text } = Typography;
+  const history = useHistory()
 
   const openDrawer = () => setVisible(!visible);
   const handleSidenavType = (type) => setSidenavType(type);
@@ -24,7 +27,10 @@ function AjaxDashboard({ children }) {
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
 
-  useEffect(() => {}, [pathname]);
+  useEffect(() => {
+    if (!localStorage.hasOwnProperty("access_token"))
+      history.push('/sign-in')
+  }, []);
 
   const count = [
     {
